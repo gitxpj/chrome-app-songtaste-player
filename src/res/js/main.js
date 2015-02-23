@@ -1,9 +1,11 @@
 var st = SongTaste;
 Audio.init();
 Audio.onprogress = function() {
-    if (Audio.isReady) {
+    if (Audio.isReady && Audio.playing) {
+
         $(".inner_time").html(formatSeconds(Audio.currentTime) + "/" + formatSeconds(Audio.totalTime));
         $(".inner_progress_bar").width(Audio.getProgressWidth($(".inner_bar").width()));
+
         if (Audio.playing) {
             $(".play").removeClass("play").addClass("pause");
         }
@@ -64,10 +66,14 @@ function backPrev() {
 function init() {
     nowTitle = null;
     nowPath = null;
-    Audio.audio.pause();
+
+    Audio.pause();
+
     $(".pause").removeClass("pause").addClass("play");
+
     $(".inner_progress_bar").width(0);
     $(".inner_time").html('00:00/00:00');
+
     $(".album").attr("src", "img/icon.png");
     $(".title").html("当前没有播放歌曲！");
 }
@@ -109,7 +115,8 @@ var nowTitle = null;
 
 function hideTip() {
     $("#notify").animate({
-        top: '-5%'
+        top: '-5%',
+        marginTop: '-5%'
     }, "350", function() {
         $("#notify").hide();
         $("#shadow").hide();
@@ -122,7 +129,8 @@ function showTip(str) {
     $("#shadow").show();
     $("#notify").show();
     $("#notify").animate({
-        top: '42%'
+        top: '50%',
+        marginTop: "height / 2"
     }, "350");
 }
 
@@ -134,7 +142,6 @@ function showTitle() {
 }
 
 $(function() {
-
     $(".album").on("error", function() {
         $(this).attr("src", "img/icon.png");
     });
@@ -147,11 +154,11 @@ $(function() {
 
     $(".play").on("click", function() {
         if (Audio.playing) {
-            $(".play").removeClass("play").addClass("pause");
             Audio.pause();
-        } else {
             $(".pause").removeClass("pause").addClass("play");
+        } else {
             Audio.play();
+            $(".play").removeClass("play").addClass("pause");
         }
     })
 
@@ -168,16 +175,6 @@ $(function() {
         }
     });
 
-    $(".btnL,.btnR").on("mouseover", function() {
-        $(this).css({
-            backgroundPositionX: "-32px"
-        });
-    }).on("mouseout", function() {
-        $(this).css({
-            backgroundPositionX: "0px"
-        });
-    });
-
     $(".max").on("click", function() {
         if (Audio.audio.muted) {
             Audio.audio.muted = false;
@@ -188,22 +185,41 @@ $(function() {
         }
     });
 
-    // $("#title_bar").on("mouseover", function() {
-    //     showTitle();
-    // });
+    $(".close").on("click", function() {
+        window.close();
+    });
 
-    //$("#title_bar").hide();
+    $(".min").on("click", function() {
+        chrome.app.window.current().minimize();
+    });
 
     $(".download").on("click", function() {
-        // var filename = nowTitle;
-        // filename = filename.replace(/\\/gi, "", filename);
-        // filename = filename.replace(/\//gi, "", filename);
-        // filename = filename.replace(/:/gi, "", filename);
-        // filename = filename.replace(/\*/gi, "", filename);
-        // filename = filename.replace(/\?/gi, "", filename);
-        // filename = filename.replace(/</gi, "", filename);
-        // filename = filename.replace(/>/gi, "", filename);
-        // filename = filename.replace(/\|/gi, "", filename);
+        var filename = nowTitle;
+        var url = nowPath;
+        var index = nowIndex;
+
+        filename = filename.replace(/\\/gi, "", filename);
+        filename = filename.replace(/\//gi, "", filename);
+        filename = filename.replace(/:/gi, "", filename);
+        filename = filename.replace(/\*/gi, "", filename);
+        filename = filename.replace(/\?/gi, "", filename);
+        filename = filename.replace(/</gi, "", filename);
+        filename = filename.replace(/>/gi, "", filename);
+        filename = filename.replace(/\|/gi, "", filename);
+
+        fileSystem.chooseSaveFile(filename + ".mp3", function(callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+            xhr.onloadend = function(e) {
+
+            }
+            xhr.onprogress = function() {
+
+            }
+        });
+
+
         // chrome.downloads.download({
         //     url: nowPath,
         //     filename: filename + ".mp3",
@@ -211,12 +227,12 @@ $(function() {
         // }, function(downloadId) {
         //     chrome.downloads.show(downloadId);
         // });
-        $("#shadow_img").css({
-            "backgroundImage": "url()"
-        });
-        init();
-        tipClickCancel = false;
-        getList();
+        // $("#shadow_img").css({
+        //     "backgroundImage": "url()"
+        // });
+        // init();
+        // tipClickCancel = false;
+        // getList();
     });
 
     $(".next").on("click", function() {
@@ -253,7 +269,8 @@ function getList() {
                 ul.append(li);
             };
             hideTip();
-            $("body").append(ul);
+            //$("body").append(ul);
+            $("#container").append(ul);
         }
     });
 }
@@ -294,11 +311,41 @@ function onItemClick() {
 
 function playDetail(detail) {
     $(".title").html("正在播放:&nbsp;" + detail.title);
-    $(".album").attr("src", detail.author.l_img);
-    $("#shadow_img").css({
-        "backgroundImage": "url(" + detail.author.l_img + ")"
-    });
+    //.attr("src", detail.author.l_img);
+    // $("#shadow_img").css({
+    //     "backgroundImage": "url(" + detail.author.l_img + ")"
+    // });
+    getImgResources([{
+        element: $("#shadow_img"),
+        type: "background"
+    }, {
+        element: $(".album"),
+        type: "img"
+    }], detail.author.l_img);
     getPath(detail.url_hash, detail.id);
+}
+
+function getImgResources(array, path) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', path, true);
+    xhr.responseType = 'blob';
+    xhr.onloadend = function(e) {
+        var path = window.URL.createObjectURL(this.response);
+        for (var i = 0; i < array.length; i++) {
+            var item = array[i];
+            if (item.type == "img") {
+                $(item.element).attr("src", path);
+            } else if (item.type == "background") {
+                $(item.element).css({
+                    "backgroundImage": "url(" + path + ")"
+                });
+            }
+        }
+    };
+    xhr.onprogress = function(e) {
+        console.log(e);
+    };
+    xhr.send();
 }
 
 function getPath(url_hash, sid) {

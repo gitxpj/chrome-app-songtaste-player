@@ -1,25 +1,28 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
-    <head lang="en">
-        <meta charset="UTF-8">
-        <title>SongTaste Player</title>
-        <script type="text/javascript" src="../libs/jquery.min.2.1.3.js"></script>
-        <script type="text/javascript" src="js/songtaste.js"></script>
-        <script type="text/javascript" src="js/audio.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <title>SongTaste Player</title>
-    </head>
-    <body>
-<!--         <div id="title_bar">
-            <span>SongTaste Player</span>
-        </div> -->
-        <div id="shadow_img"></div>
-        <div id="shadow" style="display:none;"></div>
-        <div id="notify" style="display:none;">
-            <img src="img/infomation.png" class="wh16" />
-            <span></span>
-        </div>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SongTaste Player</title>
+    <script type="text/javascript" src="../libs/jquery.min.2.1.3.js"></script>
+    <script type="text/javascript" src="js/songtaste.js"></script>
+    <script type="text/javascript" src="js/audio.js"></script>
+    <script type="text/javascript" src="js/fileSystem.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+    <div id="title_bar">
+        <span>SongTaste Player</span>
+        <span class="btn close">r</span>
+        <span class="btn min">0</span>
+    </div>
+    <div id="shadow_img"></div>
+    <div id="shadow" style="display:none;"></div>
+    <div id="notify" style="display:none;">
+        <img src="img/infomation.png" class="wh16" />
+        <span></span>
+    </div>
+    <div id="container">
         <div id="player">
             <img class="album" src="img/icon.png" />
             <span class="title">当前没有播放歌曲！</span>
@@ -39,5 +42,6 @@
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

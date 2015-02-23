@@ -69,6 +69,9 @@ li span {
     float: left;
     margin-left: 5px;
 }
+#container {
+    margin-top: 42px;
+}
 #player {
     border-radius: 2px;
     margin-left: 10px;
@@ -120,7 +123,9 @@ li span {
     width: 0px;
     position: absolute;
     height: 5px;
-    background-color: #808080;
+    /* background-color: #808080;
+    */
+    background: -webkit-gradient(linear, left center, right center, from(rgb(255, 46, 111)), to(rgb(255, 99, 59)));
     margin-top: 1px;
     margin-left: 1px;
 }
@@ -148,11 +153,19 @@ li span {
     cursor: pointer;
     float: left;
     margin-right: 15px;
+    background-position: 0px 0px;
+}
+#control_bar .btnL:hover {
+    background-position: -32px 0px;
 }
 #control_bar .btnR {
     cursor: pointer;
     float: right;
     margin-left: 10px;
+    background-position: 0px 0px;
+}
+#control_bar .btnR:hover {
+    background-position: -32px 0px;
 }
 #control_bar .back {
     background-image: url('../img/fix/back.png');
@@ -240,8 +253,38 @@ li span {
     position: absolute;
 }
 #title_bar {
-    background-color: red;
+    /* background-color: rgba(220, 220, 220, .5);
+    */
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(220, 220, 220, .8)), to(rgba(0, 0, 0, 0)));
     width: 100%;
-    height: 24px;
+    height: 32px;
     position: absolute;
+    overflow: hidden;
+}
+#title_bar span {
+    -webkit-app-region: drag;
+    float: left;
+    line-height: 32px;
+    margin-left: 5px;
+    width: 390px;
+    color: rgb(25, 25, 25);
+    display: block;
+}
+#title_bar .close:hover {
+    color: #e3e3e3;
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 0, 0, .8)), to(rgba(0, 0, 0, 0)));
+}
+#title_bar .min:hover {
+    color: #e3e3e3;
+    background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 190, 255, .8)), to(rgba(0, 0, 0, 0)));
+}
+#title_bar .btn {
+    text-align: center;
+    width: 32px;
+    float: right;
+    font-size: 14px;
+    font-family: "Webdings";
+    display: block;
+    -webkit-app-region: no-drag;
+    cursor: pointer;
 }
