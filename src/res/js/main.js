@@ -141,6 +141,20 @@ function showTitle() {
     }, "fast");
 }
 
+function downloadFile(index, path, fileEntry) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', path, true);
+    xhr.responseType = 'blob';
+    xhr.onprogress = function(e) {
+        var m = ($("li[index=" + index + "]").width() + 2) / e.total;
+        $($("li[index=" + index + "]").find(".download_progress")).width(e.loaded * m);
+    }
+    xhr.onload = function(e) {
+        fileSystem.save(fileEntry, this.response);
+    }
+    xhr.send();
+}
+
 $(function() {
     $(".album").on("error", function() {
         $(this).attr("src", "img/icon.png");
@@ -194,31 +208,29 @@ $(function() {
     });
 
     $(".download").on("click", function() {
-        var filename = nowTitle;
-        var url = nowPath;
-        var index = nowIndex;
+        if (nowPath != null) {
+            var filename = nowTitle;
+            var url = nowPath;
+            var index = nowIndex;
 
-        filename = filename.replace(/\\/gi, "", filename);
-        filename = filename.replace(/\//gi, "", filename);
-        filename = filename.replace(/:/gi, "", filename);
-        filename = filename.replace(/\*/gi, "", filename);
-        filename = filename.replace(/\?/gi, "", filename);
-        filename = filename.replace(/</gi, "", filename);
-        filename = filename.replace(/>/gi, "", filename);
-        filename = filename.replace(/\|/gi, "", filename);
+            filename = filename.replace(/\\/gi, "", filename);
+            filename = filename.replace(/\//gi, "", filename);
+            filename = filename.replace(/:/gi, "", filename);
+            filename = filename.replace(/\*/gi, "", filename);
+            filename = filename.replace(/\?/gi, "", filename);
+            filename = filename.replace(/</gi, "", filename);
+            filename = filename.replace(/>/gi, "", filename);
+            filename = filename.replace(/\|/gi, "", filename);
 
-        fileSystem.chooseSaveFile(filename + ".mp3", function(callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'blob';
-            xhr.onloadend = function(e) {
-
-            }
-            xhr.onprogress = function() {
-
-            }
-        });
-
+            fileSystem.chooseSaveFile(filename + ".mp3", function(callback) {
+                if (callback.name != "") {
+                    downloadFile(nowIndex, url, callback);
+                }
+            });
+        } else {
+            tipClickCancel = true;
+            showTip("请先播放一首歌~~~~");
+        }
 
         // chrome.downloads.download({
         //     url: nowPath,
@@ -260,12 +272,14 @@ function getList() {
                 var li = $("<li></li>");
                 //var img = $("<img></img>");
                 var span = $("<span></span>");
+                var dp = $("<div class='download_progress'></div>");
                 span.html(item.name);
                 //img.attr("src", item.author.s_img);
                 li.attr("index", i);
                 li.on("click", onItemClick);
                 //li.append(img);
                 li.append(span);
+                li.append(dp);
                 ul.append(li);
             };
             hideTip();
@@ -341,9 +355,6 @@ function getImgResources(array, path) {
                 });
             }
         }
-    };
-    xhr.onprogress = function(e) {
-        console.log(e);
     };
     xhr.send();
 }

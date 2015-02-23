@@ -11,7 +11,7 @@ var fileSystem = {
         entry.createWriter(function(fileWriter) {
             fileWriter.onwriteend = function(e) {
                 fileWriter.onwriteend = null;
-                fileWriter.truncate(blob.length);
+                fileWriter.truncate(blob.size);
             };
             fileWriter.onerror = function(e) {
                 console.log('Write failed: ' + e.toString());
