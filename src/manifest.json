@@ -1,0 +1,50 @@
+{
+    "manifest_version": 2,
+    "name": "SongTaste Player",
+    "version": "1.0",
+    "author": "5L丶",
+    "short_name": "ST Player",
+    //"content_security_policy": "script-src 'self' https://songtaste.chinacloudsites.cn; object-src 'self'",
+    "description": "SongTaste音乐播放插件",
+    "icons": {
+        "16": "res/img/icon.png",
+        "48": "res/img/icon.png",
+        "128": "res/img/icon.png"
+    },
+    "sandbox": {
+        "pages": ["res/index.html"]
+    },
+    // "browser_action": {
+    //     "default_icon": {
+    //         "19": "res/img/icon.png",
+    //         "38": "res/img/icon.png"
+    //     },
+    //     "default_title": "SongTastePlayer",
+    //     "default_popup": "res/index.html"
+    // },
+    "permissions": [
+        // "tabs",
+        // "contextMenus",
+        // "storage",
+        // "webRequest",
+        // "webRequestBlocking",
+        // "http://www.songtaste.com/*",
+        //"downloads",
+        "contextMenus"
+    ],
+    "app": {
+        "background": {
+            "scripts": [
+                "src/app.js"
+            ]
+        }
+    }
+    // "background": {
+    //     "scripts": [
+    //         //后台音乐服务
+    //         "src/audioServices.js",
+    //         "src/songTasteBackgroundService.js"
+    //     ],
+    //     "persistent": true
+    // }
+}
