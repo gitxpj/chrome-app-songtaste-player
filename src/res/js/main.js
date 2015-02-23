@@ -15,6 +15,19 @@ Audio.onprogress = function() {
     }
 }
 
+chrome.contextMenus.onClicked.addListener(function(info) {
+    if (info.menuItemId == "RefreshList") {
+        $("#shadow_img").css({
+            "backgroundImage": "url()"
+        });
+        init();
+        tipClickCancel = false;
+        getList();
+    } else if (info.menuItemId == "DownloadMusic") {
+        download();
+    }
+});
+
 //state
 //1 LIST_LOOP          列表循环
 //2 SINGLE_LOOP     单曲循环
@@ -155,6 +168,32 @@ function downloadFile(index, path, fileEntry) {
     xhr.send();
 }
 
+function download() {
+    if (nowPath != null) {
+        var filename = nowTitle;
+        var url = nowPath;
+        var index = nowIndex;
+
+        filename = filename.replace(/\\/gi, "", filename);
+        filename = filename.replace(/\//gi, "", filename);
+        filename = filename.replace(/:/gi, "", filename);
+        filename = filename.replace(/\*/gi, "", filename);
+        filename = filename.replace(/\?/gi, "", filename);
+        filename = filename.replace(/</gi, "", filename);
+        filename = filename.replace(/>/gi, "", filename);
+        filename = filename.replace(/\|/gi, "", filename);
+
+        fileSystem.chooseSaveFile(filename + ".mp3", function(callback) {
+            if (callback.name != "") {
+                downloadFile(nowIndex, url, callback);
+            }
+        });
+    } else {
+        tipClickCancel = true;
+        showTip("请先播放一首歌~~~~");
+    }
+}
+
 $(function() {
     $(".album").on("error", function() {
         $(this).attr("src", "img/icon.png");
@@ -208,29 +247,7 @@ $(function() {
     });
 
     $(".download").on("click", function() {
-        if (nowPath != null) {
-            var filename = nowTitle;
-            var url = nowPath;
-            var index = nowIndex;
-
-            filename = filename.replace(/\\/gi, "", filename);
-            filename = filename.replace(/\//gi, "", filename);
-            filename = filename.replace(/:/gi, "", filename);
-            filename = filename.replace(/\*/gi, "", filename);
-            filename = filename.replace(/\?/gi, "", filename);
-            filename = filename.replace(/</gi, "", filename);
-            filename = filename.replace(/>/gi, "", filename);
-            filename = filename.replace(/\|/gi, "", filename);
-
-            fileSystem.chooseSaveFile(filename + ".mp3", function(callback) {
-                if (callback.name != "") {
-                    downloadFile(nowIndex, url, callback);
-                }
-            });
-        } else {
-            tipClickCancel = true;
-            showTip("请先播放一首歌~~~~");
-        }
+        download();
 
         // chrome.downloads.download({
         //     url: nowPath,

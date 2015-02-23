@@ -17,14 +17,23 @@ chrome.app.runtime.onLaunched.addListener(function() {
 
     chrome.contextMenus.create({
         type: "normal",
-        id: "Refresh",
+        id: "RefreshList",
         title: "刷新列表",
-        contexts: ["page"],
-        onclick: function(info) {
+        contexts: ["all"]
+    });
 
-        },
-        documentUrlPatterns: ["*://" + chrome.runtime.id + "*"],
-        targetUrlPatterns: ["*://" + chrome.runtime.id + "*"]
+    chrome.contextMenus.create({
+        type: "normal",
+        id: "DownloadMusic",
+        title: "下载音乐",
+        contexts: ["all"]
+    });
+
+    chrome.contextMenus.create({
+        type: "normal",
+        id: "Copyright",
+        title: "Author 5L丶",
+        contexts: ["all"]
     });
 });
 //function addExternalMessageListener
