@@ -17,9 +17,6 @@ Audio.onprogress = function() {
 
 chrome.contextMenus.onClicked.addListener(function(info) {
     if (info.menuItemId == "RefreshList") {
-        $("#shadow_img").css({
-            "backgroundImage": "url()"
-        });
         init();
         tipClickCancel = false;
         getList();
@@ -82,6 +79,10 @@ function init() {
 
     Audio.pause();
 
+    $("#shadow_img").css({
+        "backgroundImage": "url()"
+    });
+
     $(".pause").removeClass("pause").addClass("play");
 
     $(".inner_progress_bar").width(0);
@@ -128,8 +129,7 @@ var nowTitle = null;
 
 function hideTip() {
     $("#notify").animate({
-        top: '-5%',
-        marginTop: '-5%'
+        top: '-5%'
     }, "350", function() {
         $("#notify").hide();
         $("#shadow").hide();
@@ -141,17 +141,12 @@ function showTip(str) {
     $($("#notify span")[0]).html(str);
     $("#shadow").show();
     $("#notify").show();
+    $("#notify").css({
+        left: ((window.innerWidth - $("#notify").innerWidth()) / 2) + "px"
+    });
     $("#notify").animate({
-        top: '50%',
-        marginTop: "height / 2"
+        top: ((window.innerHeight - $("#notify").innerHeight()) / 2) + "px"
     }, "350");
-}
-
-function showTitle() {
-    $("#title_bar").show();
-    $("#title_bar").animate({
-        top: '24px'
-    }, "fast");
 }
 
 function downloadFile(index, path, fileEntry) {
@@ -329,6 +324,16 @@ function playIndex(index) {
                     item.detail = detail;
                     nowTitle = detail.title;
                     playDetail(detail);
+                },
+                error: function() {
+                    tipClickCancel = true;
+                    showTip("拉取详细信息失败~请检查网络连接~");
+                    progress = false;
+                },
+                timeout: function() {
+                    tipClickCancel = true;
+                    showTip("拉取详细信息超时~");
+                    progress = false;
                 }
             });
         } else {
@@ -394,6 +399,18 @@ function getPath(url_hash, sid) {
             tipClickCancel = true;
             showTip("获取连接失败请重试~");
             progress = false;
+        },
+        timeout: function() {
+            tipClickCancel = true;
+            showTip("获取连接超时请重试~");
+            progress = false;
         }
-    })
+    });
+    setTimeout(function() {
+        if (progress) {
+            tipClickCancel = true;
+            showTip("获取连接超时请重试~");
+            progress = false;
+        }
+    }, 6000);
 }

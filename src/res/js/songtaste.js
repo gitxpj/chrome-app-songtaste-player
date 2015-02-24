@@ -5,6 +5,7 @@ var SongTaste = {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', "https://" + this.site + "/songtaste/list", true);
         xhr.responseType = 'application/json';
+        xhr.timeout = 5000;
         xhr.onloadend = function(e) {
             var data = $.parseJSON(xhr.response);
             if (object.success && data.success) {
@@ -18,12 +19,17 @@ var SongTaste = {
             if (object.error)
                 object.error();
         }
+        xhr.ontimeout = function(e) {
+            if (obj.timeout)
+                obj.timeout();
+        }
         xhr.send();
     },
     getDetails: function(object) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', "https://" + this.site + "/songtaste/details?id=" + object.id, true);
         xhr.responseType = 'application/json';
+        xhr.timeout = 5000;
         xhr.onloadend = function(e) {
             var data = $.parseJSON(xhr.response);
             if (object.success && data.success) {
@@ -37,6 +43,10 @@ var SongTaste = {
             if (object.error)
                 object.error();
         }
+        xhr.ontimeout = function(e) {
+            if (obj.timeout)
+                obj.timeout();
+        }
         xhr.send();
     },
     getPath: function(object) {
@@ -45,6 +55,7 @@ var SongTaste = {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', "https://" + SongTaste.site + "/songtaste/path?sid=" + object.id + "&hash=" + object.url_hash, true);
             xhr.responseType = 'application/json';
+            xhr.timeout = 5000;
             xhr.onloadend = function(e) {
                 var data = $.parseJSON(xhr.response);
                 if (obj.success && data.success) {
@@ -59,12 +70,17 @@ var SongTaste = {
                 if (obj.error)
                     obj.error();
             }
+            xhr.ontimeout = function(e) {
+                if (obj.timeout)
+                    obj.timeout();
+            }
             xhr.send();
         }
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "http://" + SongTaste.baseSite + "/time.php?p", true);
         xhr.responseType = 'text/html';
+        xhr.timeout = 5000;
         xhr.onloadend = function(e) {
             var data = xhr.response;
             if (object.success && data.success) {
@@ -79,6 +95,10 @@ var SongTaste = {
         }
         xhr.onerror = function(e) {
             backUpRequest(object);
+        }
+        xhr.ontimeout = function(e) {
+            if (obj.timeout)
+                obj.timeout();
         }
         xhr.send("str=" + object.url_hash + "&sid" + object.id);
     }
