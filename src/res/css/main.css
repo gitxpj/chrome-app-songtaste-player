@@ -153,19 +153,19 @@ li span {
     cursor: pointer;
     float: left;
     margin-right: 15px;
-    background-position: 0px 0px;
+    background-position-x: 0px;
 }
 #control_bar .btnL:hover {
-    background-position: -32px 0px;
+    background-position-x: -32px;
 }
 #control_bar .btnR {
     cursor: pointer;
     float: right;
     margin-left: 10px;
-    background-position: 0px 0px;
+    background-position-x: 0px;
 }
 #control_bar .btnR:hover {
-    background-position: -32px 0px;
+    background-position-x: -32px;
 }
 #control_bar .back {
     background-image: url('../img/fix/back.png');
