@@ -289,8 +289,6 @@ li span {
     cursor: pointer;
 }
 .download_progress {
-    margin-top: -1px;
-    margin-left: -1px;
     height: 2px;
     background: -webkit-gradient(linear, left center, right center, from(rgb(255, 46, 111)), to(rgb(255, 99, 59)));
     width: 0px;

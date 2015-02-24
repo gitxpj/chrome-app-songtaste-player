@@ -159,7 +159,7 @@ function downloadFile(index, path, fileEntry) {
     xhr.open('GET', path, true);
     xhr.responseType = 'blob';
     xhr.onprogress = function(e) {
-        var m = ($("li[index=" + index + "]").width() + 2) / e.total;
+        var m = $("li[index=" + index + "]").width() / e.total;
         $($("li[index=" + index + "]").find(".download_progress")).width(e.loaded * m);
     }
     xhr.onload = function(e) {
