@@ -302,6 +302,11 @@ function getList() {
             hideTip();
             //$("body").append(ul);
             $("#container").append(ul);
+        },
+        error: function() {
+            tipClickCancel = true;
+            showTip("获取列表失败~");
+            progress = false;
         }
     });
 }
@@ -383,6 +388,11 @@ function getPath(url_hash, sid) {
         success: function(path) {
             Audio.play(path.play_path);
             nowPath = path.download_path;
+            progress = false;
+        },
+        error: function() {
+            tipClickCancel = true;
+            showTip("获取连接失败请重试~");
             progress = false;
         }
     })
