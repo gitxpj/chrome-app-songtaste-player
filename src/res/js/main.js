@@ -9,6 +9,7 @@ Audio.onprogress = function() {
         if (Audio.playing) {
             $(".play").removeClass("play").addClass("pause");
         }
+
         if (!Audio.playing || Audio.isEnded) {
             $(".pause").removeClass("pause").addClass("play");
         }
@@ -412,5 +413,5 @@ function getPath(url_hash, sid) {
             showTip("获取连接超时请重试~");
             progress = false;
         }
-    }, 6000);
+    }, 5000);
 }
