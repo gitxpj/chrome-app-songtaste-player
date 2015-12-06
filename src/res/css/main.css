@@ -25,9 +25,6 @@ html, body {
     /* background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FF2E6F), color-stop(1, #FF623C));
     */
 }
-body {
-    -webkit-app-region: drag;
-}
 ul {
     list-style: none;
     padding-left: 0px;
@@ -84,7 +81,6 @@ li span {
     overflow: hidden;
     background-color: rgb(250, 250, 250);    /*box-shadow: inset 10 10 10 50 rgb(0, 0, 0);*/
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
-    -webkit-app-region: drag;
 }
 .title {
     margin-top: 8px;

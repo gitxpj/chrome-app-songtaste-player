@@ -28,6 +28,8 @@ chrome.contextMenus.onClicked.addListener(function(info) {
         chrome.app.window.current().minimize();
     } else if (info.menuItemId == "CloseWindow") {
         window.close();
+    } else if (info.menuItemId == "Copyright") {
+        window.open("https://github.com/gitxpj");
     }
 });
 
