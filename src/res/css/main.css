@@ -68,7 +68,7 @@ li span {
     margin-left: 5px;
 }
 #container {
-
+    -webkit-app-region: no-drag;
     /*margin-top: 42px;*/
 }
 #player {
@@ -243,7 +243,7 @@ li span {
     margin: 0px 0px;
     padding: 0px 0px;
 }
-.album {
+body {
     -webkit-app-region: drag;
 }
 #shadow_img {
