@@ -331,6 +331,7 @@ function playIndex(index) {
             st.getDetails({
                 id: sid,
                 success: function(detail) {
+                    progress = false;
                     item.detail = detail;
                     nowTitle = detail.title;
                     playDetail(detail);
