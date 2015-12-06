@@ -1,5 +1,6 @@
 var st = SongTaste;
 Audio.init();
+
 Audio.onprogress = function() {
     if (Audio.isReady && Audio.playing) {
 
@@ -23,6 +24,10 @@ chrome.contextMenus.onClicked.addListener(function(info) {
         getList();
     } else if (info.menuItemId == "DownloadMusic") {
         download();
+    } else if (info.menuItemId == "MiniWindow") {
+        chrome.app.window.current().minimize();
+    } else if (info.menuItemId == "CloseWindow") {
+        window.close();
     }
 });
 
@@ -41,31 +46,35 @@ function rand(min, max) {
 
 function nextPrev() {
     if (parseInt(nowIndex) != -1) {
-        var plusOne = parseInt(nowIndex + 1);
-        if (state == 1 || state == 2) {
+        var plusOne = parseInt(nowIndex) + 1;
+        if (state == 1) {
             if (plusOne < tempArray.length) {
                 playIndex(plusOne);
             } else {
                 playIndex(0);
             }
+        } else if (state == 2) {
+            playIndex(nowIndex);
         } else if (state == 3) {
             playIndex(rand(0, tempArray.length - 1));
         }
     } else {
         tipClickCancel = true;
-        showTip("请先选择一首歌~");
+        showTip("选择一首歌啦~");
     }
 }
 
 function backPrev() {
     if (parseInt(nowIndex) != -1) {
-        var subOne = parseInt(nowIndex - 1);
-        if (state == 1 || state == 2) {
+        var subOne = parseInt(nowIndex) - 1;
+        if (state == 1) {
             if (subOne > -1) {
                 playIndex(subOne);
             } else {
                 playIndex(tempArray.length - 1);
             }
+        } else if (state == 2) {
+            playIndex(nowIndex);
         } else if (state == 3) {
             playIndex(rand(0, tempArray.length - 1));
         }
@@ -89,7 +98,9 @@ function init() {
     $(".inner_progress_bar").width(0);
     $(".inner_time").html('00:00/00:00');
 
-    $(".album").attr("src", "img/icon.png");
+    $(".album").css({
+        "backgroundImage": "url(img/album.png)"
+    });
     $(".title").html("当前没有播放歌曲！");
 }
 
@@ -129,25 +140,27 @@ var nowPath = null;
 var nowTitle = null;
 
 function hideTip() {
-    $("#notify").animate({
-        top: '-5%'
-    }, "350", function() {
-        $("#notify").hide();
-        $("#shadow").hide();
-        $($("#notify span")[0]).html("");
+    $("#container").css({
+        "-webkit-filter": ""
     });
+    $("#notify").hide();
+    $("#shadow").hide();
+    $($("#notify span")[0]).html("");
 }
 
-function showTip(str) {
+function showTip(str, isblur) {
     $($("#notify span")[0]).html(str);
     $("#shadow").show();
+    if (isblur == undefined || isblur == true) {
+        $("#container").css({
+            "-webkit-filter": "blur(10px)"
+        });
+    }
     $("#notify").show();
     $("#notify").css({
+        top: ((window.innerHeight - $("#notify").innerHeight()) / 2) + "px",
         left: ((window.innerWidth - $("#notify").innerWidth()) / 2) + "px"
     });
-    $("#notify").animate({
-        top: ((window.innerHeight - $("#notify").innerHeight()) / 2) + "px"
-    }, "350");
 }
 
 function downloadFile(index, path, fileEntry) {
@@ -190,10 +203,12 @@ function download() {
     }
 }
 
-$(function() {
-    $(".album").on("error", function() {
-        $(this).attr("src", "img/icon.png");
-    });
+$(window).load(function() {
+    // $(".album").on("error", function() {
+    //     $(".album").css({
+    //         "backgroundImage": "url(img/icon.png)"
+    //     });
+    // });
 
     $("#shadow").on("click", function() {
         if (tipClickCancel) {
@@ -234,14 +249,6 @@ $(function() {
         }
     });
 
-    $(".close").on("click", function() {
-        window.close();
-    });
-
-    $(".min").on("click", function() {
-        chrome.app.window.current().minimize();
-    });
-
     $(".download").on("click", function() {
         download();
 
@@ -274,7 +281,7 @@ $(function() {
 
 function getList() {
     $("ul").remove();
-    showTip("正在加载列表~~~~~~");
+    showTip("正在加载列表~~~~~~", false);
     //加载列表
     st.getList({
         success: function(data) {
@@ -301,7 +308,7 @@ function getList() {
         },
         error: function() {
             tipClickCancel = true;
-            showTip("获取列表失败~");
+            showTip("获取列表失败~", false);
             progress = false;
         }
     });
@@ -353,17 +360,18 @@ function onItemClick() {
 
 function playDetail(detail) {
     $(".title").html("正在播放:&nbsp;" + detail.title);
-    //.attr("src", detail.author.l_img);
-    // $("#shadow_img").css({
-    //     "backgroundImage": "url(" + detail.author.l_img + ")"
-    // });
-    getImgResources([{
-        element: $("#shadow_img"),
-        type: "background"
-    }, {
-        element: $(".album"),
-        type: "img"
-    }], detail.author.l_img);
+    var path = detail.author.l_img;
+    if (path) {
+        getImgResources([{
+            element: $("#shadow_img")
+        }, {
+            element: $(".album")
+        }], path);
+    } else {
+        $(".album").css({
+            "backgroundImage": "url(img/album.png)"
+        });
+    }
     getPath(detail.url_hash, detail.id);
 }
 
@@ -375,13 +383,9 @@ function getImgResources(array, path) {
         var path = window.URL.createObjectURL(this.response);
         for (var i = 0; i < array.length; i++) {
             var item = array[i];
-            if (item.type == "img") {
-                $(item.element).attr("src", path);
-            } else if (item.type == "background") {
-                $(item.element).css({
-                    "backgroundImage": "url(" + path + ")"
-                });
-            }
+            $(item.element).css({
+                "backgroundImage": "url(" + path + ")"
+            });
         }
     };
     xhr.send();

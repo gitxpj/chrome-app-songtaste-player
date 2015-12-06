@@ -7,10 +7,10 @@
 chrome.app.runtime.onLaunched.addListener(function() {
     chrome.app.window.create('res/index.html', {
         "id": "SongTastePlayer",
-        "minWidth": 475,
-        "minHeight": 386,
-        "maxWidth": 475,
-        "maxHeight": 386,
+        "minWidth": 495,
+        "minHeight": 476,
+        "maxWidth": 495,
+        "maxHeight": 476,
         "singleton": true,
         "frame": "none"
     });
@@ -26,6 +26,20 @@ chrome.app.runtime.onLaunched.addListener(function() {
         type: "normal",
         id: "DownloadMusic",
         title: "下载音乐",
+        contexts: ["all"]
+    });
+
+    chrome.contextMenus.create({
+        type: "normal",
+        id: "MiniWindow",
+        title: "最小化",
+        contexts: ["all"]
+    });
+
+    chrome.contextMenus.create({
+        type: "normal",
+        id: "CloseWindow",
+        title: "关闭",
         contexts: ["all"]
     });
 

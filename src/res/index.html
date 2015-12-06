@@ -1,47 +1,48 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head lang="en">
-        <meta charset="UTF-8">
-        <title>SongTaste Player</title>
-        <script type="text/javascript" src="../libs/jquery.min.2.1.3.js"></script>
-        <script type="text/javascript" src="js/songtaste.js"></script>
-        <script type="text/javascript" src="js/audio.js"></script>
-        <script type="text/javascript" src="js/fileSystem.js"></script>
-        <script type="text/javascript" src="js/main.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-    </head>
-    <body>
-        <div id="title_bar">
-            <span>SongTaste Player</span>
-            <span class="btn close">r</span>
-            <span class="btn min">0</span>
-        </div>
-        <div id="shadow_img"></div>
-        <div id="shadow" style="display:none;"></div>
-        <div id="notify" style="display:none;">
-            <img src="img/infomation.png" class="wh16" />
-            <span></span>
-        </div>
-        <div id="container">
-            <div id="player">
-                <img class="album" src="img/icon.png" />
-                <span class="title">当前没有播放歌曲！</span>
-                <div id="progress_bar">
-                    <div class="inner_bar"></div>
-                    <div class="inner_progress_bar"></div>
-                </div>
-                <span class="inner_time">00:00/00:00</span>
-                <div id="control_bar">
-                    <div class="btnL wh32 back"></div>
-                    <div class="btnL wh32 play"></div>
-                    <div class="btnL wh32 next"></div>
-                    <div class="btnL wh32 loop"></div>
-                    <div class="right">
-                        <div class="btnR wh32 max"></div>
-                        <div class="btnR wh32 download"></div>
-                    </div>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>SongTaste Player</title>
+    <script type="text/javascript" src="../libs/jquery.min.2.1.3.js"></script>
+    <script type="text/javascript" src="js/songtaste.js"></script>
+    <script type="text/javascript" src="js/audio.js"></script>
+    <script type="text/javascript" src="js/fileSystem.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/main.css"></head>
+<body>
+<!--     <div id="title_bar">
+        <span>SongTaste Player</span>
+        <span class="btn close">X</span>
+        <span class="btn min">_</span>
+    </div>
+ -->
+    <div id="shadow_img"></div>
+    <div id="shadow" style="display:none;"></div>
+    <!-- <rect id="shadow" style="display:none;" filter="url(#blurry)" x="0" y="0" height="100%" width="100%"/> -->
+    <div id="notify" style="display:none;">
+        <img src="img/infomation.png" class="wh16" />
+        <span></span>
+    </div>
+    <div id="container">
+        <div id="player">
+            <div class="album" src="img/icon.png"></div>
+            <span class="title">当前没有播放歌曲！</span>
+            <div id="progress_bar">
+                <div class="inner_bar"></div>
+                <div class="inner_progress_bar"></div>
+            </div>
+            <span class="inner_time">00:00/00:00</span>
+            <div id="control_bar">
+                <div class="btnL wh32 back"></div>
+                <div class="btnL wh32 play"></div>
+                <div class="btnL wh32 next"></div>
+                <div class="btnL wh32 loop"></div>
+                <div class="right">
+                    <div class="btnR wh32 max"></div>
+                    <div class="btnR wh32 download"></div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>

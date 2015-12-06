@@ -7,10 +7,15 @@ var SongTaste = {
         xhr.responseType = 'application/json';
         xhr.timeout = 5000;
         xhr.onloadend = function(e) {
-            var data = $.parseJSON(xhr.response);
-            if (object.success && data.err == 0) {
-                object.success(data.songs);
-            } else {
+            if(xhr.response) {
+                var data = $.parseJSON(xhr.response);
+                if (object.success && data.err == 0) {
+                    object.success(data.songs);
+                } else {
+                    if (object.error)
+                        object.error();
+                }
+            }  else {
                 if (object.error)
                     object.error();
             }
@@ -31,9 +36,14 @@ var SongTaste = {
         xhr.responseType = 'application/json';
         xhr.timeout = 5000;
         xhr.onloadend = function(e) {
-            var data = $.parseJSON(xhr.response);
-            if (object.success && data.err == 0) {
-                object.success(data.detail);
+            if(xhr.response) {
+                var data = $.parseJSON(xhr.response);
+                if (object.success && data.err == 0) {
+                    object.success(data.detail);
+                } else {
+                    if (object.error)
+                        object.error();
+                }
             } else {
                 if (object.error)
                     object.error();
@@ -50,21 +60,24 @@ var SongTaste = {
         xhr.send();
     },
     getPath: function(object) {
-
         var obj = object;
-        // var backUpRequest = function(obj) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', "http://" + SongTaste.site + "/songtaste/path?sid=" + object.id + "&hash=" + object.url_hash, true);
         xhr.responseType = 'application/json';
         xhr.timeout = 5000;
         xhr.onloadend = function(e) {
-            var data = $.parseJSON(xhr.response);
-            if (obj.success && data.err == 0) {
-                obj.success(data);
-            } else {
-                if (obj.error) {
-                    obj.error();
+            if(xhr.response) {
+                var data = $.parseJSON(xhr.response);
+                if (obj.success && data.err == 0) {
+                    obj.success(data);
+                } else {
+                    if (obj.error) {
+                        obj.error();
+                    }
                 }
+            } else {
+                if (object.error)
+                    object.error();
             }
         }
         xhr.onerror = function(e) {
@@ -76,31 +89,5 @@ var SongTaste = {
                 obj.timeout();
         }
         xhr.send();
-        // }
-
-        // var xhr = new XMLHttpRequest();
-        // xhr.open('POST', "http://" + SongTaste.baseSite + "/time.php", true);
-        // xhr.responseType = 'text/html';
-        // xhr.timeout = 1000;
-        // xhr.onloadend = function(e) {
-        //     var data = xhr.response;
-        //     if (object.success && data.success) {
-        //         object.success({
-        //             success: true,
-        //             play_path: data,
-        //             download_path: data.replace(/http:\/\/m/ig, "http://media")
-        //         });
-        //     } else {
-        //         backUpRequest(object);
-        //     }
-        // }
-        // xhr.onerror = function(e) {
-        //     backUpRequest(object);
-        // }
-        // xhr.ontimeout = function(e) {
-        //     if (object.timeout)
-        //         object.timeout();
-        // }
-        // xhr.send("str=" + object.url_hash + "&sid=" + object.id + "&t=0");
     }
 }
