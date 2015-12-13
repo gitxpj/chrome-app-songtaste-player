@@ -142,27 +142,59 @@ var nowPath = null;
 var nowTitle = null;
 
 function hideTip() {
-    $("#container").css({
-        "-webkit-filter": ""
-    });
-    $("#notify").hide();
+    vhBlur = 1;
+    blurAnimation();
+    $("#notify").fadeOut(200);
     $("#shadow").hide();
-    $($("#notify span")[0]).html("");
+}
+
+blur = 0;
+// 0 up
+// 1 down
+vhBlur = 0;
+animationInterval = null;
+
+function blurAnimation () {
+    if  (animationInterval == null) {
+        console.log("is null");
+        animationInterval = setInterval(function() {
+            if(vhBlur == 0) {
+                if (blur <= 10) {
+                    blur += 1;
+                } else {
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                    return;
+                }
+            } else {
+                if (blur > 0) {
+                    blur -= 1;
+                } else {
+                    clearInterval(animationInterval);
+                    animationInterval = null;
+                    return;
+                }
+            }
+            console.log("blur");
+            $("#container").css({
+                "-webkit-filter": "blur(" + blur + "px)"
+            });
+        }, 15);
+    }
 }
 
 function showTip(str, isblur) {
     $($("#notify span")[0]).html(str);
     $("#shadow").show();
     if (isblur == undefined || isblur == true) {
-        $("#container").css({
-            "-webkit-filter": "blur(10px)"
-        });
+        vhBlur = 0;
+        blurAnimation();
     }
-    $("#notify").show();
     $("#notify").css({
         top: ((window.innerHeight - $("#notify").innerHeight()) / 2) + "px",
         left: ((window.innerWidth - $("#notify").innerWidth()) / 2) + "px"
     });
+    $("#notify").fadeIn(200);
 }
 
 function downloadFile(index, path, fileEntry) {
